@@ -866,8 +866,8 @@ function PricingSection() {
             <ul className="mt-8 space-y-3 flex-1">
               {freeBenefitsIncluded.map((b) => (
                 <li key={b} className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-50 border border-emerald-200">
-                    <Check size={12} strokeWidth={3} className="text-emerald-600" />
+                  <span className="w-5 h-5 rounded-full flex items-center justify-center bg-white border hairline">
+                    <Check size={12} strokeWidth={3} className="text-ink-900" />
                   </span>
                   <span className="text-[14px] text-ink-700">{b}</span>
                 </li>
