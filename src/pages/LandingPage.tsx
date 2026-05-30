@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Plus, Package, MessageCircle, Gift, Globe as Globe2, ChartBar as BarChart3, Check, Zap, TrendingUp, Users, LogIn, ShoppingCart, Radio, Box, ClipboardList, Tag, Code as Code2, Palette, Globe, Shield, TriangleAlert as AlertTriangle, Percent, Timer } from 'lucide-react';
+import { ArrowRight, Plus, Package, MessageCircle, Gift, Globe as Globe2, ChartBar as BarChart3, Check, X, Zap, TrendingUp, Users, LogIn, ShoppingCart, Radio, Box, ClipboardList, Tag, Code as Code2, Palette, Globe, Shield, TriangleAlert as AlertTriangle, Percent, Timer } from 'lucide-react';
 import HeroPhoneCarousel from '@/components/landing/HeroPhoneCarousel';
 import { supabase } from '@/lib/supabase';
 
@@ -186,8 +186,9 @@ function Hero() {
               Criar Minha Loja
               <ArrowRight size={16} />
             </a>
-            <a href="#precos" className="btn-ghost rounded-full px-7 py-4 font-display font-medium text-[15px] inline-flex items-center">
-              Ver Planos
+            <a href="#precos" className="btn-ghost rounded-full px-7 py-4 font-display font-medium text-[15px] inline-flex items-center gap-2">
+              Começar Grátis
+              <ArrowRight size={16} />
             </a>
           </div>
           <div className="flex flex-wrap items-center gap-6 mt-10">
@@ -195,6 +196,7 @@ function Hero() {
               { label: '+3.000 lojas ativas' },
               { label: '0% taxa sobre vendas' },
               { label: 'Suporte via WhatsApp' },
+              { label: 'Plano gratuito disponível' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -829,11 +831,65 @@ function PricingSection() {
     'Remoção da logomarca VitrineTurbo',
   ];
 
+  const freeBenefitsIncluded = [
+    'Até 20 produtos',
+    'Link de catálogo gerado',
+    'Suporte via WhatsApp',
+  ];
+
+  const freeBenefitsExcluded = [
+    'Domínio próprio',
+    'Personalização de cores',
+    'Analytics avançado',
+    'Cupons de desconto',
+    'Produtos ilimitados',
+  ];
+
   return (
     <section id="precos" className="py-24 lg:py-32 bg-white border-t hairline" style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 700px' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <SectionHeading kicker="/ planos" title="Escolha o plano ideal pra você" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-14">
+          {/* Free Plan Card */}
+          <div className="reveal card-hover rounded-2xl p-7 lg:p-8 border hairline flex flex-col bg-white text-ink-900">
+            <div className="flex items-center justify-between">
+              <span className="font-display font-semibold text-[16px] text-ink-900">Free</span>
+              <span className="font-mono-label uppercase text-[10px] px-2.5 py-1 rounded-full border hairline text-ink-500">
+                Grátis
+              </span>
+            </div>
+            <div className="mt-8">
+              <span className="font-display font-semibold text-[44px] lg:text-[52px] tracking-[-0.03em] leading-none">R$ 0</span>
+              <span className="text-[14px] text-ink-500 ml-1">/ grátis</span>
+            </div>
+            <p className="text-[13px] text-ink-500 mt-3">Para quem está começando</p>
+            <ul className="mt-8 space-y-3 flex-1">
+              {freeBenefitsIncluded.map((b) => (
+                <li key={b} className="flex items-center gap-3">
+                  <span className="w-5 h-5 rounded-full flex items-center justify-center bg-emerald-50 border border-emerald-200">
+                    <Check size={12} strokeWidth={3} className="text-emerald-600" />
+                  </span>
+                  <span className="text-[14px] text-ink-700">{b}</span>
+                </li>
+              ))}
+              {freeBenefitsExcluded.map((b) => (
+                <li key={b} className="flex items-center gap-3">
+                  <span className="w-5 h-5 rounded-full flex items-center justify-center bg-ink-50 border hairline">
+                    <X size={12} strokeWidth={3} className="text-ink-300" />
+                  </span>
+                  <span className="text-[14px] text-ink-400 line-through">{b}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="/register"
+              className="mt-8 rounded-full px-6 py-3.5 font-display font-medium text-[14px] inline-flex items-center justify-center gap-2 transition-colors border-2 border-ink-900 text-ink-900 hover:bg-ink-900 hover:text-white"
+            >
+              Começar grátis
+              <ArrowRight size={14} />
+            </a>
+          </div>
+
           <PricingCard
             tag="Flexível"
             name="Trimestral"
@@ -861,6 +917,10 @@ function PricingSection() {
 
 function FaqSection() {
   const items = [
+    {
+      q: 'Existe um plano gratuito?',
+      a: 'Sim! O plano Free permite cadastrar até 20 produtos sem nenhum custo, sem precisar inserir cartão de crédito. É a forma mais simples de começar sua vitrine digital. Quando sua loja crescer e você precisar de mais recursos, basta fazer o upgrade para um plano pago com um clique.',
+    },
     {
       q: 'Preciso de cartão de crédito para começar?',
       a: 'Não. Você pode criar sua vitrine e explorar a plataforma sem nenhum compromisso inicial.',
@@ -937,6 +997,13 @@ function FinalCTA() {
             Começar Agora
             <ArrowRight size={16} />
           </a>
+          <p className="mt-4 text-[13px] text-ink-400">
+            Ou comece pelo{' '}
+            <a href="#precos" className="text-ink-600 underline underline-offset-2 hover:text-ink-900 transition-colors">
+              plano gratuito
+            </a>
+            , sem cartão de crédito &rarr;
+          </p>
         </div>
       </div>
     </section>
