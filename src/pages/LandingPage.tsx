@@ -183,11 +183,11 @@ function Hero() {
           </p>
           <div className="flex flex-wrap items-center gap-3 mt-8">
             <a href="/register" className="btn-primary rounded-full px-7 py-4 font-display font-medium text-[15px] inline-flex items-center gap-2">
-              Criar Minha Loja
+              Começar Grátis
               <ArrowRight size={16} />
             </a>
-            <a href="#precos" className="btn-ghost rounded-full px-7 py-4 font-display font-medium text-[15px] inline-flex items-center gap-2">
-              Começar Grátis
+            <a href="#precos" onClick={(e) => { e.preventDefault(); document.getElementById('precos')?.scrollIntoView({ behavior: 'smooth' }); }} className="btn-ghost rounded-full px-7 py-4 font-display font-medium text-[15px] inline-flex items-center gap-2">
+              Ver Planos
               <ArrowRight size={16} />
             </a>
           </div>
