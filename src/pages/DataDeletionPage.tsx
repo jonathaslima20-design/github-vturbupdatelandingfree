@@ -169,7 +169,7 @@ export default function DataDeletionPage() {
               {/* Name */}
               <div className="space-y-1.5">
                 <Label htmlFor="name">
-                  Nome completo <span className="text-rose-500">*</span>
+                  Nome <span className="text-rose-500">*</span>
                 </Label>
                 <Input
                   id="name"

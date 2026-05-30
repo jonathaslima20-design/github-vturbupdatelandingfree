@@ -90,7 +90,7 @@ export default function CustomerInfoDialog({
 
         <div className="space-y-4 pt-2">
           <div className="space-y-2">
-            <Label htmlFor="customer-name">Nome completo</Label>
+            <Label htmlFor="customer-name">Nome</Label>
             <Input
               id="customer-name"
               placeholder="Seu nome"

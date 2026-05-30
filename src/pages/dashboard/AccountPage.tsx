@@ -194,7 +194,7 @@ export default function AccountPage() {
                       Seu Nome
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Seu nome completo" {...field} />
+                      <Input placeholder="Seu nome" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -224,7 +224,7 @@ export default function RegisterPage() {
                       <FormLabel>Seu Nome</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Seu nome completo"
+                          placeholder="Seu nome"
                           disabled={isLoading}
                           {...field}
                         />

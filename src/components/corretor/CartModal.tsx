@@ -791,7 +791,7 @@ export default function CartModal({
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <Label htmlFor="checkout-name" className="text-xs text-muted-foreground">
-                        Nome completo
+                        Nome
                       </Label>
                       <Input
                         id="checkout-name"

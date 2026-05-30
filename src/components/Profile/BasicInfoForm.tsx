@@ -31,7 +31,7 @@ export function BasicInfoForm({ form, user, onNameChange }: BasicInfoFormProps) 
           <FormItem>
             <FormLabel>Seu Nome</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Seu nome completo" />
+              <Input {...field} placeholder="Seu nome" />
             </FormControl>
             <FormMessage />
           </FormItem>
