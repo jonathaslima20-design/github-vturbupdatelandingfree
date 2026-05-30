@@ -833,7 +833,7 @@ function PricingSection() {
 
   const freeBenefitsIncluded = [
     'Até 20 produtos',
-    'Link de catálogo gerado',
+    'Catálogo Digital via Link',
     'Suporte via WhatsApp',
   ];
 
