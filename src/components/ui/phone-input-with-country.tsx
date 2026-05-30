@@ -363,7 +363,7 @@ export const PhoneInputWithCountry = React.forwardRef<
             onFocus={() => setEditingDdi(true)}
             onBlur={handleDdiBlur}
             placeholder="+55"
-            className="w-14 sm:w-20"
+            className="w-16 sm:w-20"
             disabled={props.disabled}
           />
           <Input
