@@ -834,7 +834,7 @@ function PricingSection() {
   const freeBenefitsIncluded = [
     'Até 20 produtos',
     'Catálogo Digital via Link',
-    'Suporte via WhatsApp',
+    'Suporte Humanizado',
   ];
 
   const freeBenefitsExcluded = [
