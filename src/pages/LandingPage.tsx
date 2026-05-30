@@ -195,7 +195,7 @@ function Hero() {
             {[
               { label: '+3.000 lojas ativas' },
               { label: '0% taxa sobre vendas' },
-              { label: 'Suporte via WhatsApp' },
+              { label: 'Suporte Humanizado' },
               { label: 'Plano gratuito disponível' },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-2">
