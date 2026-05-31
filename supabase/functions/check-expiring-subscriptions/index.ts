@@ -35,6 +35,35 @@ Deno.serve(async (req: Request) => {
     let notificationsCreated = 0;
     let notificationsSkipped = 0;
     let usersBlocked = 0;
+    let usersSynced = 0;
+
+    // 0. Sync users.subscription_end_date from subscriptions table
+    // This prevents desync issues where admin updates subscriptions.next_payment_date
+    // but users.subscription_end_date stays stale.
+    const { data: activeSubscriptions } = await supabase
+      .from("subscriptions")
+      .select("user_id, next_payment_date")
+      .eq("status", "active")
+      .not("next_payment_date", "is", null);
+
+    for (const sub of activeSubscriptions || []) {
+      const nextPayment = sub.next_payment_date?.split("T")[0];
+      if (!nextPayment) continue;
+
+      const { data: user } = await supabase
+        .from("users")
+        .select("id, subscription_end_date")
+        .eq("id", sub.user_id)
+        .maybeSingle();
+
+      if (user && user.subscription_end_date !== nextPayment) {
+        await supabase
+          .from("users")
+          .update({ subscription_end_date: nextPayment })
+          .eq("id", user.id);
+        usersSynced++;
+      }
+    }
 
     // 1. Notify users with subscriptions expiring in the next 7 days
     const { data: expiringUsers, error: queryError } = await supabase
@@ -141,6 +170,28 @@ Deno.serve(async (req: Request) => {
       .lt("subscription_end_date", graceCutoffStr);
 
     for (const user of usersToBlock || []) {
+      // Double-check: skip if there's an active subscription with a future date
+      const { data: activeSub } = await supabase
+        .from("subscriptions")
+        .select("id, next_payment_date")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .gt("next_payment_date", todayStr)
+        .limit(1);
+
+      if (activeSub && activeSub.length > 0) {
+        // Subscription is actually valid - sync the date instead of expiring
+        await supabase
+          .from("users")
+          .update({
+            subscription_end_date:
+              activeSub[0].next_payment_date.split("T")[0],
+          })
+          .eq("id", user.id);
+        usersSynced++;
+        continue;
+      }
+
       await supabase
         .from("users")
         .update({ plan_status: "expired" })
@@ -176,6 +227,7 @@ Deno.serve(async (req: Request) => {
         expiring_users_found: expiringUsers?.length || 0,
         recently_expired_in_grace: recentlyExpiredUsers?.length || 0,
         users_blocked: usersBlocked,
+        users_synced: usersSynced,
         notifications_created: notificationsCreated,
         notifications_skipped: notificationsSkipped,
       }),

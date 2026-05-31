@@ -181,11 +181,8 @@ export default function SubscriptionManagement({
       const userUpdate: Record<string, unknown> = {
         billing_cycle: editForm.billing_cycle,
         next_payment_date: editForm.next_payment_date,
+        subscription_end_date: editForm.next_payment_date,
       };
-
-      if (editForm.status === 'active' && editForm.next_payment_date) {
-        userUpdate.subscription_end_date = editForm.next_payment_date;
-      }
 
       await supabase
         .from('users')

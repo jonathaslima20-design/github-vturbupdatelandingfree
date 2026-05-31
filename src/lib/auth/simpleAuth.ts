@@ -315,11 +315,29 @@ export async function authenticateUser(email: string, password: string): Promise
       const graceCutoff = new Date();
       graceCutoff.setDate(graceCutoff.getDate() - 2);
       if (endDate < graceCutoff) {
-        await supabase
-          .from('users')
-          .update({ plan_status: 'expired' })
-          .eq('id', userProfile.id);
-        enrichedProfile.plan_status = 'expired';
+        // Check subscriptions table for an active subscription with future date before expiring
+        const { data: activeSub } = await supabase
+          .from('subscriptions')
+          .select('next_payment_date')
+          .eq('user_id', userProfile.id)
+          .eq('status', 'active')
+          .gt('next_payment_date', new Date().toISOString().split('T')[0])
+          .limit(1);
+
+        if (activeSub && activeSub.length > 0) {
+          // Sync the stale users.subscription_end_date from the subscription
+          await supabase
+            .from('users')
+            .update({ subscription_end_date: activeSub[0].next_payment_date.split('T')[0] })
+            .eq('id', userProfile.id);
+          enrichedProfile.subscription_end_date = activeSub[0].next_payment_date.split('T')[0];
+        } else {
+          await supabase
+            .from('users')
+            .update({ plan_status: 'expired' })
+            .eq('id', userProfile.id);
+          enrichedProfile.plan_status = 'expired';
+        }
       }
     }
 
@@ -682,11 +700,28 @@ export async function refreshUserFromDB(): Promise<StoredUser | null> {
       const graceCutoff = new Date();
       graceCutoff.setDate(graceCutoff.getDate() - 2);
       if (endDate < graceCutoff) {
-        await supabase
-          .from('users')
-          .update({ plan_status: 'expired' })
-          .eq('id', userProfile.id);
-        userProfile.plan_status = 'expired';
+        // Check subscriptions table for an active subscription with future date before expiring
+        const { data: activeSub } = await supabase
+          .from('subscriptions')
+          .select('next_payment_date')
+          .eq('user_id', userProfile.id)
+          .eq('status', 'active')
+          .gt('next_payment_date', new Date().toISOString().split('T')[0])
+          .limit(1);
+
+        if (activeSub && activeSub.length > 0) {
+          await supabase
+            .from('users')
+            .update({ subscription_end_date: activeSub[0].next_payment_date.split('T')[0] })
+            .eq('id', userProfile.id);
+          userProfile.subscription_end_date = activeSub[0].next_payment_date.split('T')[0];
+        } else {
+          await supabase
+            .from('users')
+            .update({ plan_status: 'expired' })
+            .eq('id', userProfile.id);
+          userProfile.plan_status = 'expired';
+        }
       }
     }
 
